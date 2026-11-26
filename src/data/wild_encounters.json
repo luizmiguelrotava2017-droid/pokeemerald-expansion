@@ -305,7 +305,33 @@
           "land_mons": {
             "encounter_rate": 20,
             "mons": [
-              {
+              {"land_mons": {
+  "encounter_rate": 20,
+  "mons": [
+    {
+      "min_level": 2,
+      "max_level": 4,
+      "species": "SPECIES_BULBASAUR"
+    },
+    {
+      "min_level": 2,
+      "max_level": 4,
+      "species": "SPECIES_CHARMANDER"
+    },
+    {
+      "min_level": 2,
+      "max_level": 4,
+      "species": "SPECIES_SQUIRTLE"
+    },
+    {
+      "min_level": 2,
+      "max_level": 4,
+      "species": "SPECIES_PIDGEY"
+    }
+    // ... mantenha os outros 8 slots até fechar os 12!
+  ]
+}
+
                 "min_level": 2,
                 "max_level": 2,
                 "species": "SPECIES_POOCHYENA"
