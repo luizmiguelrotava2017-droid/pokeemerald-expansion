@@ -8,14 +8,31 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/pret/devkitarm:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install dependencies and devkitARM
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential binutils-arm-none-eabi git libpng-dev python3 wget
+          wget -q https://devkitpro.org
+          chmod +x ./install-devkitpro-pacman
+          sudo ./install-devkitpro-pacman
+          sudo dkp-pacman -Syu --noconfirm gba-dev
+
+      - name: Build agbcc
+        run: |
+          git clone https://github.com
+          cd agbcc
+          ./build.sh
+          ./install.sh ..
+
       - name: Build ROM
-        run: make -j$(nproc)
+        run: |
+          export DEVKITPRO=/opt/devkitpro
+          export DEVKITARM=/opt/devkitpro/devkitARM
+          make -j$(nproc)
 
       - name: Upload ROM
         uses: actions/upload-artifact@v4
