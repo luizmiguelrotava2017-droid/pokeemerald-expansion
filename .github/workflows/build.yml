@@ -12,22 +12,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup devkitPro
-        uses: devkitPro/setup-devkitpro@v1
-        with:
-          packages: gba-dev
-
-      - name: Install dependencies & build agbcc
+      - name: Install dependencies and devkitARM
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential binutils-arm-none-eabi libpng-dev python3
+          sudo apt-get install -y build-essential binutils-arm-none-eabi git libpng-dev python3 wget
+          wget https://devkitpro.org
+          sudo dpkg -i devkitpro-pacman.amd64.deb
+          sudo dkp-pacman -Syu --noconfirm gba-dev
+
+      - name: Build agbcc
+        run: |
           git clone https://github.com
           cd agbcc
           ./build.sh
           ./install.sh ..
 
       - name: Build ROM
-        run: make -j$(nproc)
+        run: |
+          export DEVKITPRO=/opt/devkitpro
+          export DEVKITARM=/opt/devkitpro/devkitARM
+          make -j$(nproc)
 
       - name: Upload ROM
         uses: actions/upload-artifact@v4
